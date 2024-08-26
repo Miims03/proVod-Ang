@@ -1,4 +1,4 @@
-// src/app/services/api.service.ts
+
 import { Injectable } from '@angular/core';
 import axios from 'axios';
 
@@ -6,13 +6,13 @@ import axios from 'axios';
   providedIn: 'root',
 })
 export class ApiService {
-  private apiUrl = 'https://localhost:8000/api/video';
+  private apiUrl = 'http://localhost:8000';
 
   constructor() {}
   
   getVideoData() {
 
-    return axios.get(`${this.apiUrl}`)
+    return axios.get(`${this.apiUrl}/api/video`)
       .then(response => {
         return response.data;
       })
@@ -20,5 +20,19 @@ export class ApiService {
         console.error('Erreur lors de la requête GET:', error);
         throw error;
       });
+  }
+  async login(email: string, password: string){
+    try {
+      const response = await axios.post(`${this.apiUrl}/api/login`, {
+        email,
+        password
+      });
+      return response.data;
+    } catch (error) {
+      if (error) {
+        return { success: false, message: error};
+      }
+      return { success: false, message: 'An error occurred' };
+    }
   }
 }
