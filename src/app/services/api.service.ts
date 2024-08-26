@@ -6,11 +6,11 @@ import axios from 'axios';
   providedIn: 'root',
 })
 export class ApiService {
-  private apiUrl = 'http://127.0.0.1:8000/api/video';
+  private apiUrl = 'https://localhost:8000/api/video';
 
   constructor() {}
   
-  getData() {
+  getVideoData() {
 
     return axios.get(`${this.apiUrl}`)
       .then(response => {

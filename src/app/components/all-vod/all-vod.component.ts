@@ -12,27 +12,36 @@ import { ApiService } from '../../services/api.service';
 })
 export class AllVodComponent implements OnInit {
   
-  data: { title: string, description:string, videoLink: SafeResourceUrl }[] = [];
+  data: { 
+    title: string, 
+    description:string, 
+    videoLink: SafeResourceUrl
+  }[] = [];
 
   constructor(private apiService: ApiService, private sanitizer: DomSanitizer) {}
 
   ngOnInit() {
-    this.apiService.getData().then((responseData) => {
-      this.data = responseData.map((item: { title: string, description:string, videoLink: string }) => ({
+    this.apiService.getVideoData()
+    .then((responseData) => {
+      this.data = responseData.map((item: { 
+        title: string, 
+        description:string, 
+        videoLink: string 
+      }) => ({
         title: item.title,
         description: item.description,
-        videoLink: this.sanitizer.bypassSecurityTrustResourceUrl(this.convertToEmbedUrl((item.videoLink)))
+        videoLink: this.sanitizer.bypassSecurityTrustResourceUrl(item.videoLink)
       }));
     }).catch(error => {
       console.error('Erreur lors de la récupération des données:', error);
     });
   }
-  convertToEmbedUrl(url: string): string {
-    const regex = /(?:youtube\.com\/watch\?v=|youtu\.be\/)([^"&?\/\s]{11})/;
-    const match = url.match(regex);
-    if (match && match[1]) {
-      return `https://www.youtube.com/embed/${match[1]}`;
-    }
-    return url
-  }
+  // convertToEmbedUrl(url: string): string {
+  //   const regex = /(?:youtube\.com\/watch\?v=|youtu\.be\/)([^"&?\/\s]{11})/;
+  //   const match = url.match(regex);
+  //   if (match && match[1]) {
+  //     return `https://www.youtube.com/embed/${match[1]}`;
+  //   }
+  //   return url
+  // }
 }
